@@ -16,3 +16,9 @@ body {
 .content{
     flex-grow: 1;
 }
+
+.item-hover:hover{
+    color: #ffc107 !important;
+    border-bottom: 2px solid #d2a00a !important;
+    transition: ease-in-out 0.1s;
+}
