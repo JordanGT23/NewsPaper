@@ -63,8 +63,8 @@
                             <td>{{ categorie.alias }}</td>
                             <td>{{ categorie.createdAt | date('d/m/Y') }}</td>
                             <td>
-                                <a href="{{ path('restore_category', {'id': category.id}) }}" class="text-info" title="Restaurer la catégorie"><i class="bi bi-reply-all-fill"></i></a>
-                                <a href="{{ path('hard_delete_category', {'id': category.id}) }}" class="text-danger" title="Supprimer définitivement la catégorie" onclick="return confirm('Voulez-vous vraiment supprimer définitivement la categorie')"><i class="bi bi-x-circle"></i></a>
+                                <a href="{{ path('restore_category', {'id': categorie.id}) }}" class="text-info" title="Restaurer la catégorie"><i class="bi bi-reply-all-fill"></i></a>
+                                <a href="{{ path('hard_delete_category', {'id': categorie.id}) }}" class="text-danger" title="Supprimer définitivement la catégorie" onclick="return confirm('Voulez-vous vraiment supprimer définitivement la categorie')"><i class="bi bi-x-circle"></i></a>
                             </td>
                         </tr>  
                     {% endfor %}          
