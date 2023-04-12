@@ -22,7 +22,7 @@
             <a class=" btn btn-sm btn-outline-dark" href="">Ajouter un article</a>
         </div>
         <div class="col-4">
-            <a class=" btn btn-sm btn-outline-dark" href="">Ajouter une catégorie</a>
+            <a class=" btn btn-sm btn-outline-dark" href="{{ path('create_category') }}">Ajouter une catégorie</a>
         </div>
         <div class="col-4">
             <a class=" btn btn-sm btn-outline-dark" href="">Voir les archives</a>
@@ -70,8 +70,8 @@
                             <td>{{ categorie.alias }}</td>
                             <td>{{ categorie.createdAt | date('d/m/Y') }}</td>
                             <td>
-                                <a href="" class="text-info" title="Modifier la catégorie"><i class="bi bi-pencil-square"></i></i></a>
-                                <a href="" class="text-danger" title="Archiver la catégorie"><i class="bi bi-trash3"></i></a>
+                                <a href="{{ path('update_category', {'id': categorie.id}) }}" class="text-info" title="Modifier la catégorie"><i class="bi bi-pencil-square"></i></i></a>
+                                <a href="{{ path('soft_delete_category', {'id': categorie.id}) }}" class="text-danger" title="Archiver la catégorie" onclick="return confirm('Cette action archivera la categorie. Voulez-vous continuer ?')"><i class="bi bi-trash3"></i></a>
                             </td>
                         </tr>  
                     {% endfor %}          
