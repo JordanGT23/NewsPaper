@@ -118,7 +118,40 @@
         {# ################# TABLE 3 ################# #}
         <div class="col-6">
             <h2 class="text-center">Tous les utilisateurs</h2>
-
+            <table class="table">
+                <thead>
+                    <tr class="text-center">
+                        <th>#</th>
+                        <th>Prénom</th>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Rôle</th>
+                        <th>Est auteur ?</th>
+                        <th>Créé le</th>
+                        <th>Modifié le</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr class="text-center">
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.firstname }}</td>
+                            <td>{{ user.lastname }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.roles | first }}</td>
+                            <td>{{ user.articles is empty ? 'NON' : 'OUI' }}</td>
+                            <td>{{ user.createdAt | date('d/m/Y') }}</td>
+                            <td>{{ user.updatedAt | date('d/m/Y') }}</td>
+                            <td>
+                                <a href="{{ path('modify_user_role', {'id': user.id}) }}" class="btn btn-sm btn-info" title="Modifier"><i class="bi bi-pencil-square"></i></i></a>
+                                <a href="" class="btn btn-sm btn-danger" title="Bannir" onclick="return confirm('Cette action archivera la categorie. Voulez-vous continuer ?')"><i class="bi bi-slash-circle"></i></a>
+                            </td>
+                            
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
            
         </div>
         {# ################# TABLE 3 ################# #}
