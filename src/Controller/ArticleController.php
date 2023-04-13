@@ -55,6 +55,89 @@ class ArticleController extends AbstractController
 
 
 
+    #[Route('/modifier-un-article/{id}', name: 'update_article', methods: ['GET', 'POST'])]
+    public function updateArticle(Article $article, Request $request, ArticleRepository $repository, SluggerInterface $slugger): Response
+    {
+
+        $currentPhoto = $article->getPhoto();
+
+        $form = $this->createForm(ArticleFormType::class, $article, [
+            'photo' => $currentPhoto
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()){
+            $article->setUpdatedAt(new DateTime());
+
+            $article->setAlias($slugger->slug($article->getTitle()));
+
+            // # Set de la relation entre Article et User
+            // $article->setAuthor($this->getUser());
+
+            $newphoto = $form->get('photo')->getData();
+
+            if($newphoto) {
+                $this->handleFile($article, $newphoto, $slugger);
+                #Si une nouvelle photo est uploadé, on va suprimer l'ancienne 
+                unlink($this->getParameter('uploads_dir') . DIRECTORY_SEPARATOR . $currentPhoto);
+            }
+            else{
+                $article->setPhoto($currentPhoto);
+            }
+
+            $repository->save($article, true);
+
+            $this->addFlash('success', "L'article a bie été modifié avec succès !");
+            return $this->redirectToRoute('show_dashboard');
+        }
+
+        return $this->render('admin/article/form.html.twig', [
+            'form' => $form->createView(),
+            'article' => $article
+        ]);
+    }
+
+
+    #[Route('/archiver-un-article/{id}', name: 'soft_delete_article', methods:['GET'])]
+    public function softDeleteArticle(Article $article, ArticleRepository $repository):Response
+    {
+        $article->setDeletedAt(new DateTime());
+
+        $repository->save($article, true);
+
+        $this->addFlash('success', "L'article " . $article->getTitle() . "a bien été archivé");
+
+        return $this->redirectToRoute('show_dashboard');
+    }
+
+
+    #[Route('/restaurer-un-article/{id}', name: 'restore_article', methods:['GET'])]
+    public function restoreArticle(Article $article, ArticleRepository $repository):Response
+    {
+        $article->setDeletedAt(null);
+
+        $repository->save($article, true);
+
+        $this->addFlash('success', "L'article " . $article->getTitle() . "a bien été restauré");
+
+        return $this->redirectToRoute('show_dashboard');
+    }
+    
+
+    #[Route('/supprimer-un-article/{id}', name: 'hard_delete_article', methods:['GET'])]
+    public function hardDeleteCategory(Article $article, ArticleRepository $repository):Response
+    {
+        $photo = $article->getPhoto();
+        $repository->remove($article, true);
+
+        unlink($this->getParameter('uploads_dir') . DIRECTORY_SEPARATOR . $photo);
+
+        $this->addFlash('success', "L'article " . $article->getTitle() . "a bien été supprimé definitivement");
+
+        return $this->redirectToRoute('show_dashboard');
+    }
+
+
 
 
 
@@ -64,7 +147,7 @@ class ArticleController extends AbstractController
 
         $safeFilename = $slugger->slug(pathinfo($photo->getClientOriginalName(), PATHINFO_FILENAME));
 
-        $newFilename = $safeFilename . '_' . uniqid("", true) . $extension;
+        $newFilename = $safeFilename . '_' . uniqid() . $extension;
 
         try {
             $photo->move($this->getParameter('uploads_dir'), $newFilename);

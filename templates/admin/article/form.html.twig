@@ -4,7 +4,13 @@
 
 {% block body %}
 
-    <h1 class="text-center my-3">Ajouter un article</h1>
+    {% if article is not defined %}
+        <h1 class="text-center my-3">Ajouter un article</h1>
+    {% else %}
+        <h1 class="text-center my-3">Modifier l'article N°{{ article.id }}</h1>
+    {% endif %}
+    
+    
 
     <div class="row-">
         <div class="col-8 mx-auto">
