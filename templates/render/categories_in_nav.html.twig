@@ -3,7 +3,7 @@
         
         {% for category in categories %}
             
-            <a href="" class="text-decoration-none item-hover">{{ category.name | capitalize }}</a>
+            <a href="{{ path('show_articles_from_cat', {'alias': category.alias}) }}" class="text-decoration-none item-hover">{{ category.name | capitalize }}</a>
 
         {% endfor %}
     </p>

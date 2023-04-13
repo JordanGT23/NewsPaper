@@ -1,0 +1,32 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Article {{ article.title }}{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-10 mx-auto my-3">
+            {% include "include/_flashes.html.twig" %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-10 mx-auto my-4">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="text-center card-title mb-5">{{ article.title | capitalize }}</h1>
+                    <div class="text-center text-secondary mb-3">{{ article.subtitle | capitalize }}</div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item text-center text-muted">Créé  {{ article.createdAt | ago(locale='fr') }} | Auteur : <u class="text-underline">{{ article.author.fullname }}</u></li>
+                    </ul>
+
+                    <img src="{{ asset('uploads/' ~ article.photo) }}" alt="" class="img-fluid">
+
+                    <div class="card-body">
+                        <p class="card-text col-8 mx-auto text-center my-4">{{ article.content | raw }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
