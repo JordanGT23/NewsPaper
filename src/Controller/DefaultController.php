@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Entity\Category;
 use App\Repository\ArticleRepository;
+use App\Repository\CommentaryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -37,10 +38,13 @@ class DefaultController extends AbstractController
 
 
     #[Route('/{cat_alias}/{art_alias}_{id}.html', name:'show_article', methods:['GET'])]
-    public function showArticle(Article $article):Response
+    public function showArticle(Article $article, CommentaryRepository $commentaryRepository):Response
     {
+        $commentaries = $commentaryRepository->findBy(['deletedAt' => null, 'article' => $article->getId()]);
+
         return $this->render('default/show_article.html.twig', [
-            'article' => $article
+            'article' => $article,
+            'commentaries' => $commentaries
         ]);
     }
 }

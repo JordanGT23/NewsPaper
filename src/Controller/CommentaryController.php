@@ -7,6 +7,7 @@ use App\Entity\Commentary;
 use App\Form\CommentaryFormType;
 use App\Repository\CommentaryRepository;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,6 +41,24 @@ class CommentaryController extends AbstractController
 
         return $this->render('render/form_commentary.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route("/supprimer-un-commentaire/{id}", name:'soft_delete_commentary', methods:['GET'])]
+    public function softDeleteCommentary(Commentary $commentary, Request $request, EntityManagerInterface $entityManager):Response
+    {
+        $commentary->setDeletedAt(new DateTime());
+
+        $entityManager->getRepository(Commentary::class)->save($commentary, true);
+
+        $article = $entityManager->getRepository(Article::class)->find($request->query->get('article_id'));
+
+        $this->addFlash('success', "Votre commentaire est supprimé");
+
+        return $this->redirectToRoute('show_article', [
+            'cat_alias' => $article->getCategory()->getAlias(),
+            'art_alias' => $article->getAlias(),
+            'id' => $article->getId()
         ]);
     }
 }
