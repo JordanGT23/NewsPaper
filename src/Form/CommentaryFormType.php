@@ -26,7 +26,8 @@ class CommentaryFormType extends AbstractType
             ->add('comment', TextareaType::class, [
                 'label' => false,
                 'attr' => [
-                    'placeholderr' => "laisser votre commentaire ici"
+                    'placeholderr' => "laisser votre commentaire ici",
+                    'class' => 'editor' # Cette classe nous permet d'activer CkEditor
                 ],
                 'constraints' => [
                     new NotBlank(),

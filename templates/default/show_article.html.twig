@@ -2,6 +2,20 @@
 
 {% block title %}Article {{ article.title }}{% endblock %}
 
+{% block javascripts %}
+    parent()
+    <script src="https://cdn.ckeditor.com/ckeditor5/37.0.1/classic/ckeditor.js"></script>
+
+    <script>
+        ClassicEditor
+            .create( document.querySelector( '.editor' ) )
+            .catch( error => {
+                console.error( error );
+            } );
+    </script>
+{% endblock %}
+
+
 {% block body %}
     <div class="row">
         <div class="col-10 mx-auto my-3">
@@ -39,7 +53,7 @@
                 
                 <div class="alert alert-dark mb-3" role="alert">
                     <h4 class="alert-heading">{{ commentary.author.fullname }}<span class="h6"> posté {{ commentary.createdAt | ago(locale='fr') }}</span></h4>
-                    <p>{{ commentary.comment }}</p>
+                    <p>{{ commentary.comment | raw }}</p>
                     <hr>
                     <p class"mb-0">Partager : 
                         <a href=""><i class="bi bi-instagram"></i></a>
